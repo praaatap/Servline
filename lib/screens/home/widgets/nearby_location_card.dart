@@ -18,7 +18,7 @@ class NearbyLocationCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: const Color(0x0A000000), // 4% black
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -26,20 +26,23 @@ class NearbyLocationCard extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Location type icon
           Container(
             height: 48,
             width: 48,
             decoration: BoxDecoration(
-              color: _getTypeColor(location.type),
+              color: location.type.backgroundColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               location.type.icon,
-              color: _getTypeIconColor(location.type),
+              color: location.type.color,
               size: 24,
             ),
           ),
           const SizedBox(width: 16),
+
+          // Location info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,26 +58,46 @@ class NearbyLocationCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  '${location.distance} • ${location.type.displayName}',
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    color: const Color(0xFF94A3B8),
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      '${location.distance} • ${location.type.displayName}',
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        color: const Color(0xFF94A3B8),
+                      ),
+                    ),
+                    if (location.hasPriorityQueue) ...[
+                      const SizedBox(width: 6),
+                      Icon(
+                        Icons.accessibility_new,
+                        size: 14,
+                        color: const Color(0xFF8B5CF6),
+                      ),
+                    ],
+                    if (location.supportsAppointments) ...[
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.calendar_today,
+                        size: 14,
+                        color: const Color(0xFF3B82F6),
+                      ),
+                    ],
+                  ],
                 ),
               ],
             ),
           ),
           const SizedBox(width: 12),
+
+          // Wait time badge
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getWaitTimeColor(
-                    location.waitTimeMinutes,
-                  ).withOpacity(0.1),
+                  color: _getWaitTimeColor(location.waitTimeMinutes),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
@@ -82,7 +105,7 @@ class NearbyLocationCard extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: _getWaitTimeColor(location.waitTimeMinutes),
+                    color: _getWaitTimeTextColor(location.waitTimeMinutes),
                   ),
                 ),
               ),
@@ -103,33 +126,13 @@ class NearbyLocationCard extends StatelessWidget {
     );
   }
 
-  Color _getTypeColor(LocationType type) {
-    switch (type) {
-      case LocationType.hospital:
-        return const Color(0xFFFEF2F2); // Red-50
-      case LocationType.bank:
-        return const Color(0xFFEFF6FF); // Blue-50
-      case LocationType.clinic:
-        return const Color(0xFFECFDF5); // Emerald-50
-      case LocationType.other:
-        return const Color(0xFFF1F5F9); // Slate-100
-    }
-  }
-
-  Color _getTypeIconColor(LocationType type) {
-    switch (type) {
-      case LocationType.hospital:
-        return const Color(0xFFEF4444); // Red-500
-      case LocationType.bank:
-        return const Color(0xFF3B82F6); // Blue-500
-      case LocationType.clinic:
-        return const Color(0xFF10B981); // Emerald-500
-      case LocationType.other:
-        return const Color(0xFF64748B); // Slate-500
-    }
-  }
-
   Color _getWaitTimeColor(int minutes) {
+    if (minutes < 10) return const Color(0xFFDCFCE7); // Green-100
+    if (minutes < 30) return const Color(0xFFFEF3C7); // Amber-100
+    return const Color(0xFFFEE2E2); // Red-100
+  }
+
+  Color _getWaitTimeTextColor(int minutes) {
     if (minutes < 10) return const Color(0xFF22C55E); // Green
     if (minutes < 30) return const Color(0xFFF59E0B); // Amber
     return const Color(0xFFEF4444); // Red

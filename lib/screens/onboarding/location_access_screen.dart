@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LocationAccessScreen extends StatelessWidget {
   const LocationAccessScreen({super.key});
@@ -18,8 +19,8 @@ class LocationAccessScreen extends StatelessWidget {
             Container(
               height: 250,
               width: 250,
-              decoration: BoxDecoration(
-                color: const Color(0xFFEFF6FF), // Blue-50
+              decoration: const BoxDecoration(
+                color: Color(0xFFEFF6FF), // Blue-50
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -75,9 +76,45 @@ class LocationAccessScreen extends StatelessWidget {
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: () {
-                  // Request location permission
-                  context.go('/login');
+                onPressed: () async {
+                  try {
+                    // Check and request location permission
+                    final status = await Permission.location.request();
+
+                    if (context.mounted) {
+                      if (status.isGranted) {
+                        context.go('/login');
+                      } else if (status.isPermanentlyDenied) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Location permission is permanently denied. Please enable it in settings.',
+                            ),
+                            action: SnackBarAction(
+                              label: 'Settings',
+                              onPressed: openAppSettings,
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Location permission is required for full functionality.',
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error requesting permission: $e'),
+                        ),
+                      );
+                    }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB),
