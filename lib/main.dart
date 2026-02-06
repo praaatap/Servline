@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:servline/screens/splash_screen.dart';
+import 'package:servline/router.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -11,15 +12,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Silent Queue', // Updated title
+    return MaterialApp.router(
+      title: 'Silent Queue',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3B82F6)),
         useMaterial3: true,
-        textTheme: GoogleFonts.poppinsTextTheme(), // Apply global font
+        textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: const SplashScreen(),
+      routerConfig: router,
     );
   }
 }
