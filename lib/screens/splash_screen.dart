@@ -57,11 +57,11 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Silent Queue',
+              'Servline',
               style: GoogleFonts.poppins(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF0F172A), // Dark text color
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF1E293B), // Slate-800
               ),
             ),
           ],

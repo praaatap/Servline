@@ -62,7 +62,7 @@ class LocationAccessScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Silent Queue uses your location to automatically suggest the nearest waiting rooms, saving you time when you arrive.',
+              'Servline uses your location to automatically suggest the nearest waiting rooms, saving you time when you arrive.',
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontSize: 15,

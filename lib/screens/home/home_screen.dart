@@ -33,7 +33,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        'Silent Queue',
+                        'Servline',
                         style: GoogleFonts.poppins(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

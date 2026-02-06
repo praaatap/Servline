@@ -1,31 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:servline/models/auth_state.dart';
+import 'package:servline/models/user.dart';
 
-class User {
-  final String id;
-  final String email;
-  final String name;
-
-  User({required this.id, required this.email, required this.name});
-}
-
-class AuthState {
-  final bool isLoggedIn;
-  final User? user;
-  final bool isGuest;
-
-  AuthState({this.isLoggedIn = false, this.user, this.isGuest = false});
-
-  AuthState copyWith({bool? isLoggedIn, User? user, bool? isGuest}) {
-    return AuthState(
-      isLoggedIn: isLoggedIn ?? this.isLoggedIn,
-      user: user ?? this.user,
-      isGuest: isGuest ?? this.isGuest,
-    );
+class AuthNotifier extends Notifier<AuthState> {
+  @override
+  AuthState build() {
+    return AuthState();
   }
-}
-
-class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(AuthState());
 
   void login(String email, String password) {
     // Simulate API call
@@ -53,6 +34,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 }
 
-final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier();
-});
+final authProvider = NotifierProvider<AuthNotifier, AuthState>(
+  AuthNotifier.new,
+);

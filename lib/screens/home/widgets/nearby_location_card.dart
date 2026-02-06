@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:servline/providers/location_provider.dart';
+import 'package:servline/models/location.dart';
 
 class NearbyLocationCard extends StatelessWidget {
   final LocationModel location;

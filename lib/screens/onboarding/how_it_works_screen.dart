@@ -30,7 +30,7 @@ class HowItWorksScreen extends StatelessWidget {
           children: [
             const Spacer(flex: 1),
             Text(
-              'How Silent Queue Works',
+              'How Servline Works',
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 fontSize: 24,
