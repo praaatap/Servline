@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:servline/providers/location_provider.dart';
 import 'package:servline/screens/home/widgets/nearby_location_card.dart';
 
@@ -184,40 +184,60 @@ class HomeScreen extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(Icons.home_filled, 'Home', true),
+            _buildNavItem(context, Icons.home_filled, 'Home', true, null),
             _buildNavItem(
+              context,
               Icons.confirmation_number_outlined,
               'My Ticket',
               false,
+              () => context.push('/active-ticket'),
             ),
-            _buildNavItem(Icons.history, 'History', false),
+            _buildNavItem(
+              context,
+              Icons.history,
+              'History',
+              false,
+              () => context.push('/history'),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isActive) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          icon,
-          color: isActive
-              ? const Color(0xFF3B82F6)
-              : const Color(0xFF94A3B8), // Blue-500 : Slate-400
-          size: 24,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            fontSize: 12,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-            color: isActive ? const Color(0xFF3B82F6) : const Color(0xFF94A3B8),
+  Widget _buildNavItem(
+    BuildContext context,
+    IconData icon,
+    String label,
+    bool isActive,
+    VoidCallback? onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: isActive
+                ? const Color(0xFF3B82F6)
+                : const Color(0xFF94A3B8), // Blue-500 : Slate-400
+            size: 24,
           ),
-        ),
-      ],
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+              color: isActive
+                  ? const Color(0xFF3B82F6)
+                  : const Color(0xFF94A3B8),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
